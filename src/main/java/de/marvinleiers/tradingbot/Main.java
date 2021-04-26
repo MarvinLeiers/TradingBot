@@ -1,7 +1,7 @@
 package de.marvinleiers.tradingbot;
 
-import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
+import de.marvinleiers.tradingbot.analyse.MarketAnalyser;
 import de.marvinleiers.tradingbot.datamining.CandlestickCache;
 import de.marvinleiers.tradingbot.logging.Logger;
 
@@ -9,16 +9,34 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *
+ * @author Marvin Leiers
+ * @see <a href="https://www.marvinleiers.de">www.marvinleiers</a>
+ */
+
 public class Main
 {
     private static Logger logger;
     private static CandlestickCache cache;
-    private static final CandlestickInterval interval = CandlestickInterval.ONE_MINUTE;
+    private static final String SYMBOL = "BTCUSDT";
+    private static final CandlestickInterval INTERVAL = CandlestickInterval.ONE_MINUTE;
 
     public static void main(String[] args)
     {
         logger = new Logger();
 
+        printLogo();
+
+        cache = new CandlestickCache("BTCUSDT", INTERVAL);
+        cache.start();
+
+        MarketAnalyser marketAnalyser = new MarketAnalyser(SYMBOL);
+        marketAnalyser.start();
+    }
+
+    private static void printLogo()
+    {
         System.out.println(" _____              _ _             ____        _");
         System.out.println("|_   __ __ __ _  __| (_)_ __   __ _| __ )  ___ | |_");
         System.out.println("  | || '__/ _` |/ _` | | '_ \\ / _` |  _ \\ / _ \\| __|");
@@ -27,9 +45,6 @@ public class Main
         System.out.println("                              |___/");
         System.out.println("\t\t\t\t  by Marvin Leiers");
         System.out.println(" ");
-
-        cache = new CandlestickCache("BTCUSDT", CandlestickInterval.ONE_MINUTE);
-        cache.start();
     }
 
     public static CandlestickCache getCache()
