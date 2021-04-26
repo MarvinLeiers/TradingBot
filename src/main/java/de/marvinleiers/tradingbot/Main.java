@@ -1,5 +1,7 @@
 package de.marvinleiers.tradingbot;
 
+import com.binance.api.client.domain.market.CandlestickInterval;
+import de.marvinleiers.tradingbot.datamining.CandlestickCache;
 import de.marvinleiers.tradingbot.logging.Logger;
 
 public class Main
@@ -18,6 +20,8 @@ public class Main
         System.out.println("                              |___/");
         System.out.println("\t\t\t\t  by Marvin Leiers");
 
+        CandlestickCache cache = new CandlestickCache("BTCUSDT", CandlestickInterval.ONE_MINUTE);
+        cache.start();
     }
 
     public static Logger getLogger()
