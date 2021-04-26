@@ -1,12 +1,19 @@
 package de.marvinleiers.tradingbot;
 
+import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import de.marvinleiers.tradingbot.datamining.CandlestickCache;
 import de.marvinleiers.tradingbot.logging.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 public class Main
 {
     private static Logger logger;
+    private static CandlestickCache cache;
+    private static final CandlestickInterval interval = CandlestickInterval.ONE_MINUTE;
 
     public static void main(String[] args)
     {
@@ -19,9 +26,15 @@ public class Main
         System.out.println("  |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |____/ \\___/ \\__|");
         System.out.println("                              |___/");
         System.out.println("\t\t\t\t  by Marvin Leiers");
+        System.out.println(" ");
 
-        CandlestickCache cache = new CandlestickCache("BTCUSDT", CandlestickInterval.ONE_MINUTE);
+        cache = new CandlestickCache("BTCUSDT", CandlestickInterval.ONE_MINUTE);
         cache.start();
+    }
+
+    public static CandlestickCache getCache()
+    {
+        return cache;
     }
 
     public static Logger getLogger()

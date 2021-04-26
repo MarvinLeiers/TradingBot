@@ -15,6 +15,6 @@ public class Logger
 
     public void log(LogLevel level, String text)
     {
-        System.out.println("[" + dateFormat.format(new Date(System.currentTimeMillis())) + "] [" + level.name() + "]>> " + text);
+        System.out.println("[" + dateFormat.format(new Date(System.currentTimeMillis())) + "] [" + level.name() + "]: " + text);
     }
 }

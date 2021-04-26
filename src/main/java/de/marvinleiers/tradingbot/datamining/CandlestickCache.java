@@ -7,10 +7,9 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import de.marvinleiers.tradingbot.Main;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.SimpleFormatter;
 
 public class CandlestickCache extends Thread
 {
@@ -29,10 +28,42 @@ public class CandlestickCache extends Thread
         this.ready = false;
     }
 
+    public List<Candlestick> getCandlestickTimeFrame(long from, long to)
+    {
+        if (to > System.currentTimeMillis())
+            to = System.currentTimeMillis();
+
+        List<Candlestick> candlesticks = new ArrayList<>();
+
+        while (candlesticksCache == null || !isReady())
+           waiting();
+
+        for (long time : candlesticksCache.keySet())
+        {
+            if (time >= from && time <= to)
+                candlesticks.add(candlesticksCache.get(time));
+        }
+
+        return candlesticks;
+    }
+
+    private void waiting()
+    {
+        try
+        {
+            sleep(1);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run()
     {
         Main.getLogger().log("Starting data mining...");
+
         initializeCandlestickCache(symbol, interval);
         startCandlestickEventStreaming(symbol, interval);
     }
@@ -61,7 +92,6 @@ public class CandlestickCache extends Thread
         client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
             long openTime = response.getOpenTime();
             Candlestick updateCandlestick = candlesticksCache.get(openTime);
-            Date date = new Date(openTime);
 
             if (updateCandlestick == null)
                 updateCandlestick = new Candlestick();
@@ -79,6 +109,9 @@ public class CandlestickCache extends Thread
             updateCandlestick.setTakerBuyBaseAssetVolume(response.getTakerBuyQuoteAssetVolume());
 
             candlesticksCache.put(openTime, updateCandlestick);
+
+            //Main.getLogger().log("Added candlestick of " + new SimpleDateFormat("dd:MM:yyyy HH:mm:ss")
+            // .format(new Date(openTime)));
         });
     }
 
