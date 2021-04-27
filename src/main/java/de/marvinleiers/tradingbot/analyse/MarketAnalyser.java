@@ -3,8 +3,11 @@ package de.marvinleiers.tradingbot.analyse;
 import de.marvinleiers.tradingbot.Main;
 import de.marvinleiers.tradingbot.analyse.trend.Trend;
 
+import java.text.DecimalFormat;
+
 public class MarketAnalyser extends Thread
 {
+    private static final DecimalFormat formatter = new DecimalFormat("##0.00");
     private boolean owningCrypto;
     private float priceBought;
     private final String symbol;
@@ -34,12 +37,17 @@ public class MarketAnalyser extends Thread
             if (trend == Trend.UP && !owningCrypto)
             {
                 Main.getLogger().log("Buying BTC for " + latestPrice + " USD");
+                priceBought = latestPrice;
                 owningCrypto = true;
             }
             else if (trend == Trend.DOWN && owningCrypto)
             {
-                Main.getLogger().log("Selling BTC for " + latestPrice + "USD ("
-                        + ((latestPrice - priceBought) / priceBought * 100) + "% profit)");
+                float diff = (latestPrice - priceBought);
+                double percentage = (diff / priceBought) * 100;
+                String percentageFormatted = formatter.format(percentage);
+
+                Main.getLogger().log("Selling BTC for " + latestPrice + "USD (" + percentageFormatted + "% profit)");
+
                 owningCrypto = false;
             }
             else
@@ -55,7 +63,7 @@ public class MarketAnalyser extends Thread
     {
         try
         {
-            sleep(10000);
+            sleep(1000 * 60 * 5);
         }
         catch (InterruptedException e)
         {

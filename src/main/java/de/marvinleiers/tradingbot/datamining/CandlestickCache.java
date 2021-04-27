@@ -7,6 +7,7 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import de.marvinleiers.tradingbot.Main;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CandlestickCache extends Thread
@@ -40,6 +41,16 @@ public class CandlestickCache extends Thread
 
         return new ArrayList<>(candlesticksCache.values()).subList(candlesticksCache.values().size() - lookBack,
                 candlesticksCache.values().size());
+    }
+
+    public List<Candlestick> getPastCandleSticks(int lookBack, long from)
+    {
+        while (candlesticksCache == null || !isReady())
+            waiting();
+
+        List<Candlestick> candlesticks = getCandlestickTimeFrame(0, from);
+
+        return candlesticks.subList(candlesticks.size() - lookBack, candlesticks.size());
     }
 
     public List<Candlestick> getCandlestickTimeFrame(long from, long to)
