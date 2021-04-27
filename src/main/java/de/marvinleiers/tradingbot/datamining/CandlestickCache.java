@@ -26,8 +26,15 @@ public class CandlestickCache extends Thread
         this.ready = false;
     }
 
+    public float getLatestPrice()
+    {
+        return Float.parseFloat(getCandlesticks(0).get(0).getClose());
+    }
+
     public List<Candlestick> getCandlesticks(int lookBack)
     {
+        lookBack = lookBack + 1;
+
         return new ArrayList<>(candlesticksCache.values()).subList(candlesticksCache.values().size() - lookBack,
                 candlesticksCache.values().size());
     }

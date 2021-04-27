@@ -2,6 +2,7 @@ package de.marvinleiers.tradingbot;
 
 import com.binance.api.client.domain.market.CandlestickInterval;
 import de.marvinleiers.tradingbot.analyse.MarketAnalyser;
+import de.marvinleiers.tradingbot.analyse.trend.TrendDecider;
 import de.marvinleiers.tradingbot.datamining.CandlestickCache;
 import de.marvinleiers.tradingbot.logging.Logger;
 
@@ -19,12 +20,14 @@ public class Main
 {
     private static Logger logger;
     private static CandlestickCache cache;
+    private static TrendDecider trendDecider;
     private static final String SYMBOL = "BTCUSDT";
     private static final CandlestickInterval INTERVAL = CandlestickInterval.ONE_MINUTE;
 
     public static void main(String[] args)
     {
         logger = new Logger();
+        trendDecider = new TrendDecider(SYMBOL);
 
         printLogo();
 
@@ -45,6 +48,11 @@ public class Main
         System.out.println("                              |___/");
         System.out.println("\t\t\t\t  by Marvin Leiers");
         System.out.println(" ");
+    }
+
+    public static TrendDecider getTrendDecider()
+    {
+        return trendDecider;
     }
 
     public static CandlestickCache getCache()

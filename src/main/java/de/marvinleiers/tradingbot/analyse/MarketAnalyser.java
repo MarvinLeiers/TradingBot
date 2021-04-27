@@ -29,10 +29,7 @@ public class MarketAnalyser extends Thread
 
         while (true)
         {
-            //TODO: analyse market
-            SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage(symbol, 25);
-
-            System.out.println(simpleMovingAverage.calculate());
+            System.out.println(Main.getTrendDecider().calculateTrend());
 
             try
             {
