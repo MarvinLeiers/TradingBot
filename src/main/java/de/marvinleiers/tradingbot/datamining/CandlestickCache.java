@@ -33,6 +33,9 @@ public class CandlestickCache extends Thread
 
     public List<Candlestick> getCandlesticks(int lookBack)
     {
+        while (candlesticksCache == null || !isReady())
+            waiting();
+
         lookBack = lookBack + 1;
 
         return new ArrayList<>(candlesticksCache.values()).subList(candlesticksCache.values().size() - lookBack,

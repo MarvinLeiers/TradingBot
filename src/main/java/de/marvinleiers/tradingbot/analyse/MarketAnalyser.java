@@ -1,10 +1,6 @@
 package de.marvinleiers.tradingbot.analyse;
 
-import com.binance.api.client.domain.market.Candlestick;
 import de.marvinleiers.tradingbot.Main;
-import de.marvinleiers.tradingbot.analyse.indicators.SimpleMovingAverage;
-
-import java.util.List;
 
 public class MarketAnalyser extends Thread
 {
@@ -23,13 +19,11 @@ public class MarketAnalyser extends Thread
     @Override
     public void run()
     {
-        List<Candlestick> candlesticks = Main.getCache().getCandlestickTimeFrame(0, System.currentTimeMillis());
-
         Main.getLogger().log("Analysing...");
 
         while (true)
         {
-            System.out.println(Main.getTrendDecider().calculateTrend());
+            Main.getLogger().log(Main.getTrendDecider().calculateTrend().name());
 
             try
             {

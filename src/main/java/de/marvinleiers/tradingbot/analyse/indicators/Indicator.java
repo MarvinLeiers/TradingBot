@@ -15,6 +15,4 @@ public abstract class Indicator
     }
 
     public abstract float calculate();
-
-    public abstract String getName();
 }

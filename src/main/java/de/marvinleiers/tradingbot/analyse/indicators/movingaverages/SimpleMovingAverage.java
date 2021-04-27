@@ -1,18 +1,15 @@
-package de.marvinleiers.tradingbot.analyse.indicators;
+package de.marvinleiers.tradingbot.analyse.indicators.movingaverages;
 
 import com.binance.api.client.domain.market.Candlestick;
 import de.marvinleiers.tradingbot.Main;
 
 import java.util.List;
 
-public class SimpleMovingAverage extends Indicator
+public class SimpleMovingAverage extends MovingAverage
 {
-    private final int lookBack;
-
     public SimpleMovingAverage(String symbol, int lookBack)
     {
-        super(symbol);
-        this.lookBack = lookBack;
+        super(symbol, lookBack);
     }
 
     @Override
@@ -26,11 +23,5 @@ public class SimpleMovingAverage extends Indicator
             sum += Float.parseFloat(candlestick.getClose());
 
         return sum / candlesticks.size();
-    }
-
-    @Override
-    public String getName()
-    {
-        return null;
     }
 }
