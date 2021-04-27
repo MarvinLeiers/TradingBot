@@ -7,9 +7,7 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import de.marvinleiers.tradingbot.Main;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.SimpleFormatter;
 
 public class CandlestickCache extends Thread
 {
@@ -28,6 +26,12 @@ public class CandlestickCache extends Thread
         this.ready = false;
     }
 
+    public List<Candlestick> getCandlesticks(int lookBack)
+    {
+        return new ArrayList<>(candlesticksCache.values()).subList(candlesticksCache.values().size() - lookBack,
+                candlesticksCache.values().size());
+    }
+
     public List<Candlestick> getCandlestickTimeFrame(long from, long to)
     {
         if (to > System.currentTimeMillis())
@@ -36,7 +40,7 @@ public class CandlestickCache extends Thread
         List<Candlestick> candlesticks = new ArrayList<>();
 
         while (candlesticksCache == null || !isReady())
-           waiting();
+            waiting();
 
         for (long time : candlesticksCache.keySet())
         {
@@ -109,9 +113,6 @@ public class CandlestickCache extends Thread
             updateCandlestick.setTakerBuyBaseAssetVolume(response.getTakerBuyQuoteAssetVolume());
 
             candlesticksCache.put(openTime, updateCandlestick);
-
-            //Main.getLogger().log("Added candlestick of " + new SimpleDateFormat("dd:MM:yyyy HH:mm:ss")
-            // .format(new Date(openTime)));
         });
     }
 
