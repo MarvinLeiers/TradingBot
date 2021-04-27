@@ -4,8 +4,6 @@ import com.binance.api.client.domain.market.Candlestick;
 import de.marvinleiers.tradingbot.Main;
 import de.marvinleiers.tradingbot.analyse.indicators.SimpleMovingAverage;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class MarketAnalyser extends Thread
