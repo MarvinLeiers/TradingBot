@@ -1,9 +1,12 @@
 package de.marvinleiers.tradingbot.analyse;
 
 import de.marvinleiers.tradingbot.Main;
+import de.marvinleiers.tradingbot.analyse.trend.Trend;
 
 public class MarketAnalyser extends Thread
 {
+    private boolean owningCrypto;
+    private float priceBought;
     private final String symbol;
 
     public MarketAnalyser(String symbol)
@@ -14,6 +17,8 @@ public class MarketAnalyser extends Thread
             throw new UnsupportedOperationException("Symbol does not exist (" + symbol + ")");
 
         this.symbol = symbol;
+        this.owningCrypto = false;
+        this.priceBought = -1;
     }
 
     @Override
@@ -23,16 +28,38 @@ public class MarketAnalyser extends Thread
 
         while (true)
         {
-            Main.getLogger().log(Main.getTrendDecider().calculateTrend().name());
+            Trend trend = Main.getTrendDecider().calculateTrend();
+            float latestPrice = Main.getCache().getLatestPrice();
 
-            try
+            if (trend == Trend.UP && !owningCrypto)
             {
-                sleep(10000);
+                Main.getLogger().log("Buying BTC for " + latestPrice + " USD");
+                owningCrypto = true;
             }
-            catch (InterruptedException e)
+            else if (trend == Trend.DOWN && owningCrypto)
             {
-                e.printStackTrace();
+                Main.getLogger().log("Selling BTC for " + latestPrice + "USD ("
+                        + ((latestPrice - priceBought) / priceBought * 100) + "% profit)");
+                owningCrypto = false;
             }
+            else
+            {
+                Main.getLogger().log("No opportunity found...");
+            }
+
+            sleeping();
+        }
+    }
+
+    private void sleeping()
+    {
+        try
+        {
+            sleep(10000);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
         }
     }
 }

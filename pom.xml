@@ -40,7 +40,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>de.marvinleiers.binancebot.Main</mainClass>
+                            <mainClass>de.marvinleiers.tradingbot.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
