@@ -2,6 +2,7 @@ package de.marvinleiers.tradingbot.analyse;
 
 import de.marvinleiers.tradingbot.Main;
 import de.marvinleiers.tradingbot.analyse.trend.Trend;
+import de.marvinleiers.tradingbot.strategies.BuySignal;
 import de.marvinleiers.tradingbot.strategies.Strategy;
 import de.marvinleiers.tradingbot.strategies.WMA9OverMA50Strategy;
 
@@ -36,27 +37,16 @@ public class MarketAnalyser extends Thread
 
         while (true)
         {
-            Strategy strategy = new WMA9OverMA50Strategy();
-            Trend trend = Main.getTrendDecider().calculateTrend();
-
-            System.out.println("Trend: " + trend + ", BuySignal: " + strategy.calculate());
-            sleeping();
-        }
-
-        /*
-        while (true)
-        {
-            Trend trend = Main.getTrendDecider().calculateTrend();
+            BuySignal strategy = new WMA9OverMA50Strategy().calculate();
             float latestPrice = Main.getCache().getLatestPrice();
 
-            if (trend == Trend.UP && !owningCrypto)
+            if (strategy == BuySignal.BUY && !owningCrypto)
             {
-                Main.getLogger().log("Buying BTC for " + latestPrice + " USD");
-                priceBought = latestPrice;
+                Main.getLogger().log("Buying BTC for " + latestPrice);
                 owningCrypto = true;
-                ++trades;
+                priceBought = latestPrice;
             }
-            else if (trend == Trend.DOWN && owningCrypto)
+            else if (strategy == BuySignal.SELL && owningCrypto)
             {
                 float diff = (latestPrice - priceBought);
                 double percentage = (diff / priceBought) * 100;
@@ -64,27 +54,18 @@ public class MarketAnalyser extends Thread
                 String percentageFormatted = formatter.format(percentage);
 
                 Main.getLogger().log("Selling BTC for " + latestPrice + "USD (" + percentageFormatted + "% profit)");
-
                 owningCrypto = false;
-                ++trades;
+
                 cooldown();
             }
-            else
-            {
-                Main.getLogger().log("No opportunity found...");
-            }
-
-            Main.getLogger().log("================================");
-            Main.getLogger().log("Trades: " + trades + ", profit: " + profit);
-            Main.getLogger().log("================================");
 
             sleeping();
         }
-         */
     }
 
     private void cooldown()
     {
+        Main.getLogger().log("Cooldown...");
         try
         {
             sleep(1000 * 60);
