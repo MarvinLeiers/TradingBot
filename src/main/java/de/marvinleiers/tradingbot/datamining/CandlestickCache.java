@@ -17,12 +17,9 @@ public class CandlestickCache extends Thread
     private Map<Long, Candlestick> candlesticksCache;
     private boolean ready;
 
-    public CandlestickCache(String symbol, CandlestickInterval interval)
+    public CandlestickCache(CandlestickInterval interval)
     {
-        if (!symbol.matches("[A-Z0-9]+"))
-            throw new UnsupportedOperationException("Symbol " + symbol + " is not valid");
-
-        this.symbol = symbol;
+        this.symbol = Main.getSymbol();
         this.interval = interval;
         this.ready = false;
     }

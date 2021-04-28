@@ -7,9 +7,9 @@ import java.util.List;
 
 public class WeightedMovingAverage extends MovingAverage
 {
-    public WeightedMovingAverage(String symbol, int lookBack)
+    public WeightedMovingAverage(int lookBack)
     {
-        super(symbol, lookBack);
+        super(lookBack);
     }
 
     @Override

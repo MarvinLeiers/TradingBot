@@ -1,17 +1,14 @@
 package de.marvinleiers.tradingbot.analyse.indicators;
 
+import de.marvinleiers.tradingbot.Main;
+
 public abstract class Indicator
 {
     private final String symbol;
 
-    public Indicator(String symbol)
+    public Indicator()
     {
-        symbol = symbol.toUpperCase();
-
-        if (!symbol.matches("[A-Z0-9]+"))
-            throw new UnsupportedOperationException("Symbol does not exist (" + symbol + ")");
-
-        this.symbol = symbol;
+        this.symbol = Main.getSymbol();
     }
 
     public abstract float calculate();

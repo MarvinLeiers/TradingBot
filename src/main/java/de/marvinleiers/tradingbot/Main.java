@@ -27,11 +27,11 @@ public class Main
     public static void main(String[] args)
     {
         logger = new Logger();
-        trendDecider = new TrendDecider(SYMBOL);
+        trendDecider = new TrendDecider();
 
         printLogo();
 
-        cache = new CandlestickCache("BTCUSDT", INTERVAL);
+        cache = new CandlestickCache(INTERVAL);
         cache.start();
 
         MarketAnalyser marketAnalyser = new MarketAnalyser(SYMBOL);
@@ -53,6 +53,11 @@ public class Main
     public static TrendDecider getTrendDecider()
     {
         return trendDecider;
+    }
+
+    public static String getSymbol()
+    {
+        return SYMBOL;
     }
 
     public static CandlestickCache getCache()

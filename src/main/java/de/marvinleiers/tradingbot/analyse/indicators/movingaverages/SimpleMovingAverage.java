@@ -3,20 +3,18 @@ package de.marvinleiers.tradingbot.analyse.indicators.movingaverages;
 import com.binance.api.client.domain.market.Candlestick;
 import de.marvinleiers.tradingbot.Main;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class SimpleMovingAverage extends MovingAverage
 {
-    public SimpleMovingAverage(String symbol, int lookBack)
+    public SimpleMovingAverage(int lookBack)
     {
-        super(symbol, lookBack);
+        super(lookBack);
     }
 
-    public SimpleMovingAverage(String symbol, int lookBack, long from)
+    public SimpleMovingAverage( int lookBack, long from)
     {
-        super(symbol, lookBack, from);
+        super(lookBack, from);
     }
 
     @Override
