@@ -34,8 +34,7 @@ public class MarketAnalyser extends Thread
     {
         Main.getLogger().log("Analysing...");
 
-        SimulationBot simulationBot = new SimulationBot("CJQza39JKX2693WlqICBvghcZBaJ9N6prtT43vsnpxFkdciQ3Q2xvsRYfXZwZcgK",
-                "vehQ5moW9TABr5R56kIq2KHMtFtgZONYBbkBDvrCty7Y3sGWO9HLn9O71IEkljBh");
+        SimulationBot simulationBot = new SimulationBot("apiKey", "secret");
 
         simulationBot.buy();
 
