@@ -1,9 +1,8 @@
 package de.marvinleiers.tradingbot.analyse;
 
 import de.marvinleiers.tradingbot.Main;
-import de.marvinleiers.tradingbot.analyse.trend.Trend;
+import de.marvinleiers.tradingbot.bots.SimulationBot;
 import de.marvinleiers.tradingbot.strategies.BuySignal;
-import de.marvinleiers.tradingbot.strategies.Strategy;
 import de.marvinleiers.tradingbot.strategies.WMA9OverMA50Strategy;
 
 import java.text.DecimalFormat;
@@ -34,6 +33,11 @@ public class MarketAnalyser extends Thread
     public void run()
     {
         Main.getLogger().log("Analysing...");
+
+        SimulationBot simulationBot = new SimulationBot("CJQza39JKX2693WlqICBvghcZBaJ9N6prtT43vsnpxFkdciQ3Q2xvsRYfXZwZcgK",
+                "vehQ5moW9TABr5R56kIq2KHMtFtgZONYBbkBDvrCty7Y3sGWO9HLn9O71IEkljBh");
+
+        simulationBot.buy();
 
         while (true)
         {
