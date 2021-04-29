@@ -4,6 +4,7 @@ import de.marvinleiers.tradingbot.Main;
 import de.marvinleiers.tradingbot.analyse.trend.Trend;
 import de.marvinleiers.tradingbot.strategies.BuySignal;
 import de.marvinleiers.tradingbot.strategies.Strategy;
+import de.marvinleiers.tradingbot.strategies.strategies.WMA9CrossUpToMA20Strategy;
 import de.marvinleiers.tradingbot.strategies.strategies.WMA9OverMA50Strategy;
 
 import java.text.DecimalFormat;
@@ -34,14 +35,26 @@ public class MarketAnalyser extends Thread
     public void run()
     {
         Main.getLogger().log("Analysing...");
+        Strategy strategy = null;
+        Strategy lastStrategy = null;
 
         while (true)
         {
-            Strategy strategy = null;
             Trend trend = Main.getTrendDecider().calculateTrend();
 
             if (trend == Trend.UP)
+            {
+                lastStrategy = strategy;
                 strategy = new WMA9OverMA50Strategy();
+            }
+            else
+            {
+                lastStrategy = strategy;
+                strategy = new WMA9CrossUpToMA20Strategy();
+            }
+
+            if (lastStrategy == strategy)
+                Main.getLogger().log("Using: " + strategy.getName());
 
             BuySignal signal = strategy.calculate();
             float latestPrice = Main.getCache().getLatestPrice();
@@ -57,9 +70,7 @@ public class MarketAnalyser extends Thread
                 float diff = (latestPrice - priceBought);
                 double percentage = (diff / priceBought) * 100;
                 profit += percentage;
-                String percentageFormatted = formatter.format(percentage);
-
-                System.out.println(percentage + " " + (percentage - 0.2));
+                String percentageFormatted = formatter.format(percentage - 0.2);
 
                 Main.getLogger().log("Selling BTC for " + latestPrice + "USD (" + percentageFormatted + "% profit)");
                 owningCrypto = false;
@@ -76,7 +87,7 @@ public class MarketAnalyser extends Thread
         Main.getLogger().log("Cooldown...");
         try
         {
-            sleep(1000 * 60);
+            sleep(1000 * 60 * 5);
         }
         catch (InterruptedException e)
         {
