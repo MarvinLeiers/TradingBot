@@ -1,25 +1,21 @@
-package de.marvinleiers.tradingbot.strategies;
+package de.marvinleiers.tradingbot.strategies.strategies;
 
 import de.marvinleiers.tradingbot.Main;
-import de.marvinleiers.tradingbot.analyse.indicators.movingaverages.MovingAverage;
 import de.marvinleiers.tradingbot.analyse.indicators.movingaverages.SimpleMovingAverage;
 import de.marvinleiers.tradingbot.analyse.indicators.movingaverages.WeightedMovingAverage;
 import de.marvinleiers.tradingbot.analyse.trend.Trend;
+import de.marvinleiers.tradingbot.strategies.BuySignal;
+import de.marvinleiers.tradingbot.strategies.UpTrendStrategy;
 
 /**
  *
  * Buy-signal when WMA9 is higher than MA50, sell-signal when current price is below WMA9
  */
-public class WMA9OverMA50Strategy extends Strategy
+public class WMA9OverMA50Strategy extends UpTrendStrategy
 {
     @Override
     public BuySignal calculate()
     {
-        Trend trend = Main.getTrendDecider().calculateTrend();
-
-        if (trend != Trend.UP)
-            return BuySignal.SELL;
-
         float latestPrice = Main.getCache().getLatestPrice();
         float wma9 = new WeightedMovingAverage(9).calculate();
         float ma50 = new SimpleMovingAverage(50).calculate();
