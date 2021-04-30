@@ -6,10 +6,6 @@ import de.marvinleiers.tradingbot.analyse.trend.TrendDecider;
 import de.marvinleiers.tradingbot.datamining.CandlestickCache;
 import de.marvinleiers.tradingbot.logging.Logger;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 /**
  *
  * @author Marvin Leiers

@@ -44,17 +44,19 @@ public class MarketAnalyser extends Thread
 
             if (trend == Trend.UP)
             {
-                lastStrategy = strategy;
                 strategy = new WMA9OverMA50Strategy();
             }
             else
             {
-                lastStrategy = strategy;
                 strategy = new WMA9CrossUpToMA20Strategy();
             }
 
-            if (lastStrategy == strategy)
-                Main.getLogger().log("Using: " + strategy.getName());
+            if (lastStrategy == null || !lastStrategy.getName().equals(strategy.getName()))
+            {
+                lastStrategy = strategy;
+
+                Main.getLogger().log("Now using strategy " + strategy.getName());
+            }
 
             BuySignal signal = strategy.calculate();
             float latestPrice = Main.getCache().getLatestPrice();
@@ -72,7 +74,7 @@ public class MarketAnalyser extends Thread
                 profit += percentage;
                 String percentageFormatted = formatter.format(percentage - 0.2);
 
-                Main.getLogger().log("Selling BTC for " + latestPrice + "USD (" + percentageFormatted + "% profit)");
+                Main.getLogger().log("Selling BTC for " + latestPrice + "USD (" + profit + "% profit, " + percentageFormatted + "%)");
                 owningCrypto = false;
 
                 cooldown();
